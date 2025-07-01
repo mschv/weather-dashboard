@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+      color: #333;
+      margin: 0;
+      padding: 40px;
+    }
+
+    h1, h2 {
+      color: #333;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #0077cc;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #005fa3;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    ul li {
+      margin-bottom: 8px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background-color: white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    th {
+      background-color: #f0f0f0;
+      font-weight: 600;
+    }
+
+    img {
+      display: block;
+      margin: 30px auto;
+      max-width: 100%;
+      border-radius: 8px;
+    }
+
+    @media screen and (max-width: 600px) {
+      form {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      input[type="text"], button {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌤️ Weather Dashboard</h1>
+
+  <form method="POST">
+    <label for="city">Enter a city name:</label>
+    <input type="text" name="city" id="city" required value="{{ city }}">
+    <button type="submit">Get Weather</button>
+  </form>
+
+  {% if weather %}
+    <h2>Current Weather in {{ weather.city }}, {{ weather.country }}</h2>
+    <ul>
+      <li><strong>Temperature:</strong> {{ weather.temperature }} °C</li>
+      <li><strong>Wind Speed:</strong> {{ weather.windspeed }} km/h</li>
+      <li>
+        <strong>Conditions:</strong>
+        <span style="font-size: 24px;">{{ weather.icon }}</span>
+        <small>(Code {{ weather.weathercode }})</small>
+      </li>
+    </ul>
+  {% endif %}
+
+  {% if table %}
+    <h2>Historical Temperature (Past 10 Days)</h2>
+    <img src="{{ url_for('static', filename='plot.png') }}" alt="Temperature Plot">
+
+    <table>
+      <tr>
+        <th>Date</th>
+        <th>Max Temp (°C)</th>
+        <th>Min Temp (°C)</th>
+        <th>City</th>
+      </tr>
+      {% for row in table %}
+      <tr>
+        <td>{{ row.date }}</td>
+        <td>{{ row.temperature_2m_max }}</td>
+        <td>{{ row.temperature_2m_min }}</td>
+        <td>{{ row.city }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% endif %}
+
+</body>
+</html>
