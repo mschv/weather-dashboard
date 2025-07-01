@@ -1,1 +1,1 @@
-web: gunicorn app:app
+web: gunicorn weather-dashboard.app:app
